@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Waqcha Coffee Co.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300&family=Cinzel:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --black: #0a0705;
+    --dark: #111009;
+    --cream: #f2ead8;
+    --warm: #d9c9a8;
+    --gold: #c8973a;
+    --rust: #8b3a1a;
+    --earth: #3d2b1f;
+    --smoke: rgba(242,234,216,0.06);
+  }
+
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--black);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* Grain overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none;
+    z-index: 1000;
+    opacity: 0.35;
+  }
+
+  /* HERO */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    padding: 3rem 2rem;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse 70% 60% at 50% 40%, rgba(200,151,58,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 30% at 80% 80%, rgba(139,58,26,0.06) 0%, transparent 60%);
+  }
+
+  /* Decorative lines top/bottom */
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    opacity: 0.4;
+  }
+
+  /* Andean cross decorative background */
+  .bg-cross {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    opacity: 0.03;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+
+  .logo-container {
+    width: 180px;
+    height: 180px;
+    margin-bottom: 2rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.2s;
+  }
+
+  .logo-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    filter: brightness(1.05);
+  }
+
+  .hero-brand {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(3rem, 10vw, 6rem);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    color: var(--cream);
+    line-height: 1;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.45s;
+  }
+
+  .hero-sub {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.75rem, 2.5vw, 1rem);
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    margin-top: 0.4rem;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.65s;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin: 2.2rem 0;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.8s;
+  }
+
+  .divider-line {
+    flex: 1;
+    max-width: 80px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold));
+  }
+
+  .divider-line.right {
+    background: linear-gradient(90deg, var(--gold), transparent);
+  }
+
+  .divider-dot {
+    width: 5px;
+    height: 5px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+
+  .hero-tagline {
+    font-style: italic;
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    font-weight: 300;
+    color: var(--warm);
+    letter-spacing: 0.04em;
+    max-width: 520px;
+    line-height: 1.5;
+    opacity: 0;
+    animation: fadeUp 1s ease forwards 0.95s;
+  }
+
+  /* SECTION BASE */
+  section {
+    padding: 5rem 2rem;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 1rem;
+  }
+
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 700;
+    color: var(--cream);
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+  }
+
+  /* ABOUT */
+  .about {
+    position: relative;
+    border-top: 1px solid rgba(200,151,58,0.15);
+  }
+
+  .about-body {
+    font-size: clamp(1rem, 2.5vw, 1.25rem);
+    font-weight: 300;
+    line-height: 1.9;
+    color: var(--warm);
+    max-width: 680px;
+  }
+
+  .about-body strong {
+    color: var(--cream);
+    font-weight: 400;
+  }
+
+  /* PRODUCT */
+  .product {
+    border-top: 1px solid rgba(200,151,58,0.15);
+  }
+
+  .product-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-top: 2.5rem;
+  }
+
+  @media (max-width: 640px) {
+    .product-card { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  .product-visual {
+    position: relative;
+    aspect-ratio: 3/4;
+    background: var(--earth);
+    border: 1px solid rgba(200,151,58,0.2);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    padding: 2rem;
+  }
+
+  .product-visual::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(200,151,58,0.05) 0%, transparent 60%);
+  }
+
+  /* Package illustration via CSS */
+  .pkg-wrapper {
+    width: 120px;
+    position: relative;
+  }
+
+  .pkg-body {
+    width: 120px;
+    height: 160px;
+    background: linear-gradient(160deg, #1a1108 0%, #0d0b07 100%);
+    border: 1.5px solid rgba(200,151,58,0.5);
+    border-radius: 4px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+  }
+
+  .pkg-body::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 30px;
+    height: 14px;
+    background: #0d0b07;
+    border: 1.5px solid rgba(200,151,58,0.5);
+    border-bottom: none;
+    border-radius: 3px 3px 0 0;
+  }
+
+  .pkg-notch {
+    position: absolute;
+    top: -1.5px;
+    left: 20px; right: 20px;
+    height: 1.5px;
+    background: rgba(200,151,58,0.3);
+  }
+
+  .pkg-seal {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--gold);
+    transform: rotate(45deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 4px;
+  }
+
+  .pkg-seal-inner {
+    width: 10px;
+    height: 10px;
+    background: var(--gold);
+    transform: rotate(0deg);
+    border-radius: 50%;
+  }
+
+  .pkg-name {
+    font-family: 'Cinzel', serif;
+    font-size: 7px;
+    letter-spacing: 0.2em;
+    color: var(--gold);
+  }
+
+  .pkg-tagline-small {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 6px;
+    letter-spacing: 0.1em;
+    color: rgba(242,234,216,0.5);
+    font-style: italic;
+  }
+
+  .pkg-bottom-line {
+    position: absolute;
+    bottom: 14px;
+    left: 10px; right: 10px;
+    height: 1px;
+    background: rgba(200,151,58,0.3);
+  }
+
+  .pkg-dimensions {
+    position: absolute;
+    bottom: 5px;
+    font-family: 'Cinzel', serif;
+    font-size: 5px;
+    letter-spacing: 0.15em;
+    color: rgba(200,151,58,0.4);
+  }
+
+  .product-visual-label {
+    margin-top: 1.2rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: rgba(200,151,58,0.5);
+  }
+
+  .product-info h3 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--cream);
+    margin-bottom: 1rem;
+  }
+
+  .product-info p {
+    font-size: 1.05rem;
+    font-weight: 300;
+    line-height: 1.8;
+    color: var(--warm);
+    margin-bottom: 1.5rem;
+  }
+
+  .notes-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.7rem;
+    margin-top: 1.5rem;
+  }
+
+  .note-item {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    font-size: 1rem;
+    color: var(--warm);
+    font-weight: 300;
+  }
+
+  .note-icon {
+    width: 28px;
+    height: 28px;
+    border: 1px solid rgba(200,151,58,0.4);
+    transform: rotate(45deg);
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+  }
+
+  .note-icon span { transform: rotate(-45deg); display: block; }
+
+  .size-tag {
+    display: inline-block;
+    margin-top: 1.5rem;
+    padding: 0.4rem 1rem;
+    border: 1px solid rgba(200,151,58,0.3);
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.25em;
+    color: rgba(200,151,58,0.7);
+  }
+
+  /* PROCESS */
+  .process {
+    border-top: 1px solid rgba(200,151,58,0.15);
+  }
+
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+  }
+
+  @media (max-width: 600px) {
+    .steps { grid-template-columns: 1fr; gap: 1rem; }
+  }
+
+  .step {
+    position: relative;
+    padding: 1.8rem 1.5rem;
+    border: 1px solid rgba(200,151,58,0.12);
+    background: rgba(200,151,58,0.02);
+    transition: border-color 0.3s;
+  }
+
+  .step:hover { border-color: rgba(200,151,58,0.35); }
+
+  .step-num {
+    font-family: 'Cinzel', serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: rgba(200,151,58,0.15);
+    line-height: 1;
+    margin-bottom: 0.8rem;
+  }
+
+  .step-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+    margin-bottom: 0.5rem;
+  }
+
+  .step-desc {
+    font-size: 0.9rem;
+    font-weight: 300;
+    color: var(--warm);
+    line-height: 1.7;
+    opacity: 0.85;
+  }
+
+  /* CONTACT */
+  .contact {
+    border-top: 1px solid rgba(200,151,58,0.15);
+    text-align: center;
+  }
+
+  .contact .section-title { margin-bottom: 0.5rem; }
+
+  .contact-sub {
+    font-size: 1.1rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--warm);
+    margin-bottom: 3rem;
+  }
+
+  .cta-buttons {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 3.5rem;
+  }
+
+  .cta-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    color: rgba(200,151,58,0.6);
+    margin-bottom: 0.5rem;
+  }
+
+  .wa-group {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .btn-wa {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.8rem;
+    width: 100%;
+    padding: 1rem 1.8rem;
+    background: transparent;
+    border: 1.5px solid rgba(200,151,58,0.5);
+    color: var(--cream);
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-decoration: none;
+    transition: all 0.3s;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn-wa::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: rgba(200,151,58,0.08);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.3s ease;
+  }
+
+  .btn-wa:hover { border-color: var(--gold); color: var(--gold); }
+  .btn-wa:hover::before { transform: scaleX(1); }
+
+  .wa-icon {
+    width: 16px;
+    height: 16px;
+    opacity: 0.8;
+  }
+
+  /* Socials */
+  .socials {
+    display: flex;
+    justify-content: center;
+    gap: 1.5rem;
+    margin-top: 0.5rem;
+  }
+
+  .social-link {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    color: var(--warm);
+    text-decoration: none;
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    transition: color 0.3s;
+    padding: 0.5rem 0;
+  }
+
+  .social-link:hover { color: var(--gold); }
+
+  .social-icon {
+    width: 32px;
+    height: 32px;
+    border: 1px solid rgba(200,151,58,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: border-color 0.3s;
+  }
+
+  .social-link:hover .social-icon { border-color: var(--gold); }
+
+  /* FOOTER */
+  footer {
+    padding: 2.5rem 2rem;
+    text-align: center;
+    border-top: 1px solid rgba(200,151,58,0.1);
+  }
+
+  .footer-brand {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: rgba(200,151,58,0.35);
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Scroll reveal */
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero">
+  <svg class="bg-cross" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <rect x="70" y="10" width="60" height="180" fill="white"/>
+    <rect x="10" y="70" width="180" height="60" fill="white"/>
+    <rect x="55" y="55" width="90" height="90" fill="white"/>
+  </svg>
+
+  <div class="logo-container">
+    <img src="/mnt/user-data/uploads/WhatsApp_Image_2026-05-11_at_13_00_01.jpeg" alt="Waqcha Coffee Co.">
+  </div>
+
+  <h1 class="hero-brand">WAQCHA</h1>
+  <p class="hero-sub">COFFEE CO.</p>
+
+  <div class="divider">
+    <div class="divider-line"></div>
+    <div class="divider-dot"></div>
+    <div class="divider-line right"></div>
+  </div>
+
+  <p class="hero-tagline">"Cada taza es un recordatorio de lo esencial"</p>
+</div>
+
+<!-- ABOUT -->
+<section class="about reveal">
+  <span class="section-label">Quiénes somos</span>
+  <h2 class="section-title">Café peruano, sellado en su mejor momento</h2>
+  <p class="about-body">
+    En Waqcha Coffee Co. creemos que una buena taza de café no necesita artificios. Solo <strong>granos seleccionados</strong>, tratados con respeto, y entregados en su punto exacto de frescura.<br><br>
+    Nuestros <strong>coffee drips</strong> están diseñados para llevarte lo mejor del café peruano a donde estés, sin complicaciones y sin perder ni una nota de sabor.
+  </p>
+</section>
+
+<!-- PRODUCT -->
+<section class="product reveal">
+  <span class="section-label">Nuestro producto</span>
+  <h2 class="section-title">Un solo café. El mejor café.</h2>
+
+  <div class="product-card">
+    <div class="product-visual">
+      <div class="pkg-wrapper">
+        <div class="pkg-body">
+          <div class="pkg-notch"></div>
+          <div class="pkg-seal">
+            <div class="pkg-seal-inner"></div>
+          </div>
+          <div class="pkg-name">WAQCHA</div>
+          <div class="pkg-tagline-small">COFFEE CO.</div>
+          <div class="pkg-bottom-line"></div>
+          <div class="pkg-dimensions">12.5 × 10 CM</div>
+        </div>
+      </div>
+      <p class="product-visual-label">SOBRE TRILAMINADO SELLADO</p>
+    </div>
+
+    <div class="product-info">
+      <h3>Coffee Drip</h3>
+      <p>
+        Presentación individual en sobre trilaminado herméticamente sellado, que protege el café del aire y la humedad para garantizar que cada preparación sea <em>perfecta</em>.
+      </p>
+      <p>La información completa del café está impresa en ambas caras del sobre.</p>
+
+      <div class="notes-list">
+        <p style="font-family:'Cinzel',serif;font-size:0.6rem;letter-spacing:0.3em;color:var(--gold);margin-bottom:0.3rem;">NOTAS DE SABOR</p>
+        <div class="note-item">
+          <div class="note-icon"><span>🌿</span></div>
+          Tierra húmeda
+        </div>
+        <div class="note-item">
+          <div class="note-icon"><span>🍮</span></div>
+          Caramelo
+        </div>
+        <div class="note-item">
+          <div class="note-icon"><span>🍫</span></div>
+          Cacao
+        </div>
+      </div>
+
+      <div class="size-tag">PRESENTACIÓN: 12.5 × 10 CM</div>
+    </div>
+  </div>
+</section>
+
+<!-- PROCESS -->
+<section class="process reveal">
+  <span class="section-label">El proceso</span>
+  <h2 class="section-title">Simple. Puro. Perfecto.</h2>
+
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">01</div>
+      <div class="step-title">Coloca el drip</div>
+      <p class="step-desc">Abre el sobre y despliega el filtro sobre tu taza favorita.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">02</div>
+      <div class="step-title">Vierte el agua</div>
+      <p class="step-desc">Agua caliente a ~92°C. Deja que el café libere todo su aroma.</p>
+    </div>
+    <div class="step">
+      <div class="step-num">03</div>
+      <div class="step-title">Disfruta</div>
+      <p class="step-desc">Sin máquinas. Sin complicaciones. Solo café en su estado esencial.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact reveal">
+  <span class="section-label">Pedidos</span>
+  <h2 class="section-title">¿Listo para tu primer sorbo?</h2>
+  <p class="contact-sub">Escríbenos y te asesoramos con tu pedido</p>
+
+  <div class="cta-buttons">
+    <p class="cta-label">CONTÁCTANOS POR WHATSAPP</p>
+    <div class="wa-group">
+      <a href="https://wa.me/51990994241" target="_blank" class="btn-wa">
+        <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        +51 990 994 241
+      </a>
+      <a href="https://wa.me/51933676413" target="_blank" class="btn-wa">
+        <svg class="wa-icon" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+        </svg>
+        +51 933 676 413
+      </a>
+    </div>
+  </div>
+
+  <p class="cta-label" style="margin-bottom:1.2rem;">SÍGUENOS</p>
+  <div class="socials">
+    <a href="https://instagram.com/waqcha.coffee" target="_blank" class="social-link">
+      <div class="social-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+        </svg>
+      </div>
+      @waqcha.coffee
+    </a>
+    <a href="https://tiktok.com/@waqcha.coffee" target="_blank" class="social-link">
+      <div class="social-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.69a8.18 8.18 0 004.78 1.52V6.76a4.85 4.85 0 01-1.01-.07z"/>
+        </svg>
+      </div>
+      @waqcha.coffee
+    </a>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p class="footer-brand">© 2026 WAQCHA COFFEE CO. — PERÚ</p>
+</footer>
+
+<script>
+  // Scroll reveal
+  const reveals = document.querySelectorAll('.reveal');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => {
+      if (e.isIntersecting) {
+        e.target.classList.add('visible');
+        observer.unobserve(e.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  reveals.forEach(r => observer.observe(r));
+</script>
+
+</body>
+</html>
